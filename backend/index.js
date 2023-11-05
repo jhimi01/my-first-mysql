@@ -1,24 +1,26 @@
 import express from "express";
 import mysql from "mysql";
-import bodyParser from "body-parser"; // Import body-parser
+import cors from "cors";
+// import bodyParser from "body-parser"; // Import body-parser
 
 const app = express();
+
 
 // Use body-parser middleware to parse request bodies
 // app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(bodyParser.json());
 
-// Use body-parser middleware to parse request bodies
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use(express.json())
+
+app.use(express.json())
+app.use(cors())
 
 const db = mysql.createConnection({
     host: 'localhost',
     user: "root",
-    password: 'Lamadev123',
+    password: '1234',
     database: 'test'
 })
+
 
 app.get('/', (req, res) =>{
     res.json("hello this is the beckend")
@@ -27,27 +29,28 @@ app.get('/', (req, res) =>{
 app.get("/books", (req, res) =>{
     const q = "SELECT * FROM books"
     db.query(q, (err, data)=>{
-        console.log(data)
-        return res.json(data)
-        // if (err) return res.json(err)
-
+        if (err) {
+            return res.json(err);
+        }
+        console.log(data);
+        return res.json(data);
     })
 })
 
 
 
-app.post("/books", (req, res) => {
-    const q = "INSERT INTO books (`title`, `desc`, `cover`) VALUES (?, ?, ?)";
+// app.post("/books", (req, res) => {
+//     const q = "INSERT INTO books (`title`, `desc`, `cover`) VALUES (?, ?, ?)";
 
-    const values = ["title from book", "description from book", "cover from book"];
+//     const values = ["title from book", "description from book", "cover from book"];
 
-    db.query(q, values, (err, data) => {
-        if (err) {
-            return res.json(err);
-        }
-        return res.json(data);
-    });
-});
+//     db.query(q, values, (err, data) => {
+//         if (err) {
+//             return res.json(err);
+//         }
+//         return res.json(data);
+//     });
+// });
 
 
 // request from server
